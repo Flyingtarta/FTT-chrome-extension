@@ -121,7 +121,7 @@ chrome.runtime.onMessage.addListener(
 
         if (request.order === "addAll" ) {
             let modids = JSON.stringify(request.ids)
-            if (modid === []) {
+            if (modids === []) {
                 return;
             }            
             sessionStorage.setItem("modsInPreset_temp", JSON.stringify(request.ids));
