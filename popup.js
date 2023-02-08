@@ -109,8 +109,8 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 
 //let mods_id = JSON.parse(sessionStorage.getItem("modsInPreset")) || [];
 
-//esto ta al pedo 
-let button = document.getElementsByClassName("buttons")[0];
+
+
 
 
 

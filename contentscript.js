@@ -71,29 +71,37 @@ function modAdder() {
     if (!addmods) {
         return;
     }
-    let modids_temp = JSON.parse(sessionStorage.getItem("modsInPreset_temp")) || [];
 
-    if (modids_temp === []) {
-        sessionStorage.setItem("addAllmodsInpreset", JSON.stringify(false));
+    let modids_temp = JSON.parse(sessionStorage.getItem("modsInPreset_temp")) || [];
+    let modTemp = [];
+    
+    modids_temp.forEach(modid => {
+        let isAdded = document.getElementById("sharedfile_" + modid) || false;
+        if (!isAdded) {
+            modTemp.push(modid);
+        }
+    })
+
+    if (modTemp.length === 0) {
+        sessionStorage.setItem("addAllmodsInpreset",JSON.parse(false));
+        sessionStorage.setItem("modsInPreset_temp", JSON.stringify([]));
         return; 
     }
 
-    let modid = modids_temp[0]
-    modids_temp.splice( 0, 1);
-    sessionStorage.setItem("modsInPreset_temp", JSON.stringify(modids_temp));
+    let modid = modTemp[0];
+    modTemp.splice( 0, 1);
+    console.log(modTemp)
+    sessionStorage.setItem("modsInPreset_temp", JSON.stringify(modTemp) );
     
     let myButton = document.getElementById("choice_MySubscribedItems_" + modid);
 
     if (myButton) {
-        console.log(myButton)
         myButton.click();
         return;
     }
-
-    location.reload();
-    // Simular un clic en el elemento
     
-    //
+    window.location.reload();
+    
 }
 
 
