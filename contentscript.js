@@ -1,19 +1,20 @@
 
 
 function toggleShowModsInHtml(){
-    let show = JSON.parse(sessionStorage.getItem("ShowMods")) || false;
+    let show = JSON.parse(sessionStorage.getItem("toggleHiglightMods")) || false;
     
     if (!show) {
-        sessionStorage.setItem("ShowMods", JSON.stringify(true));
+        sessionStorage.setItem("toggleHiglightMods", JSON.stringify(true));
     }else{
-        sessionStorage.setItem("ShowMods", JSON.stringify(!show));
+        sessionStorage.setItem("toggleHiglightMods", JSON.stringify(!show));
     }
     window.location.reload();
+    
 }
 
 
 function higlightMods() {
-    let show = JSON.parse(sessionStorage.getItem("ShowMods")) || false;
+    let show = JSON.parse(sessionStorage.getItem("toggleHiglightMods")) || false;
 
     if (!show) {
         return;
@@ -95,6 +96,8 @@ function modAdder() {
     //
 }
 
+
+
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
 
@@ -102,6 +105,9 @@ chrome.runtime.onMessage.addListener(
 
         if ( request.order === "toggleHiglightMods" ) {
             toggleShowModsInHtml();
+            let higlihtOn = JSON.parse(sessionStorage.getItem("toggleHiglightMods")) || false;
+            sendResponse({isHiglightOn: higlihtOn });
+
         }
         
         if ( request.order === "toggleAddAll") {
@@ -114,13 +120,29 @@ chrome.runtime.onMessage.addListener(
         }
 
         if (request.order === "addAll" ) {
-            modids = JSON.stringify(request.ids)
+            let modids = JSON.stringify(request.ids)
+            if (modid === []) {
+                return;
+            }            
             sessionStorage.setItem("modsInPreset_temp", JSON.stringify(request.ids));
             sessionStorage.setItem("addAllmodsInpreset", JSON.stringify(true));
             location.reload();
-
         }
+
+        //Requests of information 
+        if (request.order === "hasModIds") {
+            let modInPreset = JSON.parse(sessionStorage.getItem("modsInPreset")) || [];
+            sendResponse({mods_ids : modInPreset});
+        }
+
+        if (request.order === "isHiglightOn") {
+            let higlihtOn = JSON.parse(sessionStorage.getItem("toggleHiglightMods")) || false;
+            sendResponse({isHiglightOn: higlihtOn });
+        }
+
     }
 );
+
+
 higlightMods()
 modAdder()
