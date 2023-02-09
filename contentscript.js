@@ -1,20 +1,44 @@
 
 
-function toggleShowModsInHtml(){
-    let show = JSON.parse(sessionStorage.getItem("toggleHiglightMods")) || false;
-    
-    if (!show) {
-        sessionStorage.setItem("toggleHiglightMods", JSON.stringify(true));
-    }else{
-        sessionStorage.setItem("toggleHiglightMods", JSON.stringify(!show));
+function readModsFromPreset(fileContent) {
+    const iframe = document.createElement("iframe");
+    iframe.style.display = "None";
+    document.body.appendChild(iframe);
+    iframe.contentWindow.document.body.innerHTML = fileContent;
+    const links = iframe.contentWindow.document.getElementsByTagName("a");
+    iframe.style.height = "0px";
+    iframe.style.width = "0px";
+
+    let mod_ids = [];
+    for (let i = 0; i < links.length; i++) {
+        mylink = links[i].href
+        let id = mylink.split("=")[mylink.split("=").length - 1];
+        mod_ids.push(id);
     }
-    window.location.reload();
-    
+    const parent = iframe.parentNode;
+    parent.removeChild(iframe);
+    return mod_ids;
 }
 
+function toggleShowModsInHtml(){
+    let show = JSON.parse(sessionStorage.getItem("toggleHiglightMods")) || true;
+    sessionStorage.setItem("toggleHiglightMods", JSON.stringify(!show));
+    window.location.reload();    
+}
+
+function toogleAddAllMods(){
+    let modids = sessionStorage.getItem("modsInPreset") || [];
+    if (modids === []) {
+        return;
+    }            
+    sessionStorage.setItem("modsInPreset_temp", modids);
+    sessionStorage.setItem("addAllmodsInpreset", JSON.stringify(true));
+    location.reload();
+
+}
 
 function higlightMods() {
-    let show = JSON.parse(sessionStorage.getItem("toggleHiglightMods")) || false;
+    let show = JSON.parse(sessionStorage.getItem("toggleHiglightMods")) || true;
 
     if (!show) {
         return;
@@ -29,7 +53,7 @@ function higlightMods() {
         return ;
     }
     
-    let items = document.getElementsByClassName("itemChoice")
+    let items = document.getElementsByClassName("itemChoice");
 
     for (let i = 0; i < items.length; i++) {
         let item = items[i];
@@ -104,7 +128,111 @@ function modAdder() {
     
 }
 
+function removeAllAddedItems() {
+    
+    let items = document.getElementsByClassName("general_btn delete");
+    
+    for (let i = 0; i < items.length; i++) {
 
+        let item = items[i];
+        let cmd = item.href;
+
+        console.log("WIP")
+        //javascript:RemoveChildFromCollection( '837729515' )
+
+        //chrome.tabs.update({url: cmd });
+        
+    }
+}
+
+function owo() {
+    /*
+        TESTING 
+    
+    */
+    function createButton(text) {
+        let div = document.createElement("div");
+        div.className = "btnv6_blue_blue_innerfade btn_small_thin"; 
+        let span = document.createElement("span")
+        span.innerText = text;
+        span.id = "ftt-" + text; 
+        div.appendChild(span);
+        div.style.marginLeft = "2px";
+        return(div);
+    }
+
+    function infoText() {
+        return("Preset not loaded");
+    }
+
+    let buttonsDiv = document.getElementsByClassName("manageItemsSort");
+    if (buttonsDiv.length === 0) {
+        return;
+    }
+    buttonsDiv = buttonsDiv[0];
+    //file input
+    const fileinput = document.createElement("input");
+    fileinput.type="file";
+    fileinput.id = "ftt-fileInput";
+    fileinput.style.margin = "1px";
+    //higligt mods
+
+    const higlight = createButton("Higlight mods");
+    //ADD ALL MODS
+    const addallmods = createButton("Add all mods");
+    //remove mods
+    const removeallitems = createButton("remove all items");
+    //export to html    
+    //My own div:
+    let parent_mybuttonsDiv = document.createElement("div");
+    //style for it:
+    parent_mybuttonsDiv.style.borderWidth = "0px 0px 0px 3px";
+    parent_mybuttonsDiv.style.borderStyle = "solid";
+    parent_mybuttonsDiv.style.color = "#FEA204";
+    parent_mybuttonsDiv.style.backgroundColor = "#49443C";
+
+    let mybuttonsDiv = document.createElement("div");
+    parent_mybuttonsDiv.appendChild(mybuttonsDiv);
+
+    mybuttonsDiv.style.margin = "10px";
+    
+    //texto info
+    let textinfo = document.createElement("h4");
+    textinfo.innerText = infoText();
+    textinfo.className = "manageItemsTitle";
+    //mybuttonsDiv.style.padding = "3px";
+    //
+    mybuttonsDiv.appendChild(document.createElement("br"));
+    mybuttonsDiv.appendChild(fileinput);
+    mybuttonsDiv.appendChild(document.createElement("br"));
+    mybuttonsDiv.appendChild(textinfo)
+    mybuttonsDiv.appendChild(document.createElement("br"));
+    mybuttonsDiv.appendChild(higlight);
+    mybuttonsDiv.appendChild(addallmods);
+    mybuttonsDiv.appendChild(removeallitems);
+    
+    buttonsDiv.appendChild(parent_mybuttonsDiv);
+
+    /*LISTENERS*/
+    //FILE READER
+    const reader = new FileReader();
+    reader.onload = function () {
+
+        const fileContent = reader.result;
+        let mod_ids = readModsFromPreset(fileContent);
+        sessionStorage.setItem("modsInPreset", JSON.stringify(mod_ids));
+    };
+
+    fileinput.addEventListener("change", function () {
+        reader.readAsText(fileinput.files[0]);
+    });
+
+    //BUTTONS:
+
+    higlight.addEventListener('click', toggleShowModsInHtml)
+    addallmods.addEventListener('click', toogleAddAllMods)
+    removeallitems.addEventListener('click', removeAllAddedItems)
+}
 
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
@@ -151,6 +279,7 @@ chrome.runtime.onMessage.addListener(
     }
 );
 
-
+owo()
 higlightMods()
 modAdder()
+

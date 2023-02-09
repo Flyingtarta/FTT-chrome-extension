@@ -9,7 +9,7 @@
         "declarativeContent",
         "activeTab",
         "scripting",
-        "webNavigation"
+        "tab"
     ],
     "host_permissions": [
         ""
