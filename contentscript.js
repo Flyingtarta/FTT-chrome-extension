@@ -177,8 +177,10 @@ function addButtons() {
         modids.forEach(modid => {
 
                 const inListOfItems = document.getElementById("choice_MySubscribedItems_" + modid) || false;
-                if (!inListOfItems && !modid === ModUrl) {
-                    unsuscribed.push(modid); 
+                if (!inListOfItems) {
+                    if (!(modid === ModUrl)) {
+                        unsuscribed.push(modid); 
+                    };
 
             }
         })
