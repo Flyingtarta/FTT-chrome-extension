@@ -130,7 +130,8 @@ function addButtons() {
     function infoText(textinfo) {
         const title = document.createElement("h4");
         textinfo.appendChild(title);
-        title.className = "manageItemsTitle";
+        textinfo.style.color = "gray";
+        //title.className = "manageItemsTitle";
 
         const modids = JSON.parse(sessionStorage.getItem("modsInPreset")) || [];
         if (modids.length === 0) {
@@ -145,15 +146,26 @@ function addButtons() {
         //count extra mods:
         const items = document.getElementsByClassName("itemChoice");
 
+        const breadcrumbs = document.getElementsByClassName("breadcrumbs")[0];
+        const ModUrl = breadcrumbs.getElementsByTagName("a")[2].href.split("=")[1];
+        const currentModInPreset =  modids.includes(ModUrl);
+        
+
         for (let i = 0; i < items.length; i++) {
             let item = items[i];
+
+            //if its favorite jump 
+            const itemtag = item.id.split("_")[1]
+            if ( itemtag === "MyFavoriteItems" || itemtag === "MyItems" ) {
+                continue;
+            }
+
             let item_mod_id = item.id.split("_")[2];
             let agregado = document.getElementById("sharedfile_" + item_mod_id) || false;
             let in_preset = modids.includes(item_mod_id);
 
             if (in_preset && agregado) {
                 modsLoaded = modsLoaded + 1;
-                console.log(item_mod_id, agregado);
             }
 
             if (agregado && !in_preset) {
@@ -163,9 +175,11 @@ function addButtons() {
         }
 
         modids.forEach(modid => {
-            const inListOfItems = document.getElementById("choice_MySubscribedItems_" + modid) || false;
-            if (!inListOfItems) {
-                unsuscribed.push(modid); 
+
+                const inListOfItems = document.getElementById("choice_MySubscribedItems_" + modid) || false;
+                if (!inListOfItems && !modid === ModUrl) {
+                    unsuscribed.push(modid); 
+
             }
         })
         
@@ -175,13 +189,16 @@ function addButtons() {
         textinfo.appendChild(subtitle);
         subtitle.className = "manageItemsTitle";
         subtitle.innerText = "Mods added to colection: " + modsLoaded + "/" + modids.length ;
-        
+        if (currentModInPreset) {
+            subtitle.innerText = subtitle.innerText + " (This mod is in the preset)";
+        }
 
         if (modsExtra > 0) {
+            console.log("mods extra detected"); 
             const miniAlert = document.createElement("h5");
             //miniAlert.className = "manageItemsTitle";
             miniAlert.style.color = "rgb(254, 162, 4)";
-            miniAlert.innerText = "ALERT! | There is " + modsExtra + " Mods loaded that dont are present in the preset ( need to be removed manually)";
+            miniAlert.innerText = "INFO | There is " + modsExtra + " Mods loaded that dont are present in the preset ( need to be removed manually)";
             miniAlert.style.fontSize = "14px";
             textinfo.appendChild(miniAlert);
         }
