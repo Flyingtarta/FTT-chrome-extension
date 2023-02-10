@@ -71,23 +71,6 @@ function higlightMods() {
         }
 
     }
-    /*
-
-    ids.forEach( modid => {
-        //verificamos si este mod ya esta agregado
-
-        let agregado = document.getElementById("sharedfile_" + modid);
-        
-        //Marca en la lista los que faltan agregar
-        let requiredMod = document.getElementById("choice_MySubscribedItems_" + modid)
-
-        if (requiredMod && !agregado) { 
-            requiredMod.style.backgroundColor = "darkorchid";
-        }
-    })
-    */
-
-
 }
 
 function modAdder() {
@@ -128,7 +111,7 @@ function modAdder() {
 
 }
 
-function owo() {
+function addButtons() {
     /*
         TESTING 
     
@@ -157,7 +140,7 @@ function owo() {
 
         let modsLoaded = 0;
         let modsExtra = 0;
-        let unuscrbed = [];
+        let unsuscribed = [];
 
         //count extra mods:
         const items = document.getElementsByClassName("itemChoice");
@@ -170,6 +153,7 @@ function owo() {
 
             if (in_preset && agregado) {
                 modsLoaded = modsLoaded + 1;
+                console.log(item_mod_id, agregado);
             }
 
             if (agregado && !in_preset) {
@@ -177,27 +161,60 @@ function owo() {
             }
             
         }
-        
-        console.log(modsLoaded, modsExtra, modids.length)
 
+        modids.forEach(modid => {
+            const inListOfItems = document.getElementById("choice_MySubscribedItems_" + modid) || false;
+            if (!inListOfItems) {
+                unsuscribed.push(modid); 
+            }
+        })
+        
         title.innerText = "Preset with: " + modids.length + " Mods in it detected";
 
         const subtitle = document.createElement("h5");
         textinfo.appendChild(subtitle);
         subtitle.className = "manageItemsTitle";
-        subtitle.innerText = "" + modsLoaded + "/" + modids.length + " Added";
-        if (modsExtra.length === 0) {
-            return;
+        subtitle.innerText = "Mods added to colection: " + modsLoaded + "/" + modids.length ;
+        
+
+        if (modsExtra > 0) {
+            const miniAlert = document.createElement("h5");
+            //miniAlert.className = "manageItemsTitle";
+            miniAlert.style.color = "rgb(254, 162, 4)";
+            miniAlert.innerText = "ALERT! | There is " + modsExtra + " Mods loaded that dont are present in the preset ( need to be removed manually)";
+            miniAlert.style.fontSize = "14px";
+            textinfo.appendChild(miniAlert);
         }
-        const miniAlert = document.createElement("h5");
-        textinfo.appendChild(miniAlert);
-        subtitle.className = "manageItemsTitle";
-        miniAlert.style.color = "gray";
-        miniAlert.innerText = "There is " + modsExtra + " Mods loaded that dont are present in the preset ( need to be removed manually)";
+        
+        if (unsuscribed.length > 0) {
+            console.log("hola2")
+            const modUnsuscribedAlert = document.createElement("h5");
+            modUnsuscribedAlert.innerText = "ALERT! | There is mods in the html that you are not suscribed: ";
+            modUnsuscribedAlert.classname = "manageItemsTitle";
+            modUnsuscribedAlert.style.color = "rgb(254, 162, 4)";
+            modUnsuscribedAlert.style.fontSize = "14px";
+            const list = document.createElement("ul");
+            unsuscribed.forEach(modid => {
+                const modLink = document.createElement("li");
+                const modlink_a = document.createElement("a");
+                modlink_a.href = "https://steamcommunity.com/sharedfiles/filedetails/?id=" + modid;
+                modlink_a.innerText = "https://steamcommunity.com/sharedfiles/filedetails/?id=" + modid;
+                modlink_a.style.fontSize= "10px";
+                modLink.appendChild(modlink_a); 
+                list.appendChild(modLink);
+            })
+            modUnsuscribedAlert.appendChild(list);
+            textinfo.appendChild(modUnsuscribedAlert);
+
+        }
+        
+
+        
+
         
     }
 
-    let buttonsDiv = document.getElementsByClassName("manageItemsSort");
+    let buttonsDiv = document.getElementsByClassName("collectionAddItemsSection");
     if (buttonsDiv.length === 0) {
         return;
     }
@@ -213,7 +230,7 @@ function owo() {
     //ADD ALL MODS
     const addallmods = createButton("Add all mods");
     //remove mods
-    const removeallitems = createButton("remove all items");
+    //const removeallitems = createButton("remove all items");
     //export to html
     const export2html = createButton("Export to HTML");
     //My own div:
@@ -228,21 +245,25 @@ function owo() {
     parent_mybuttonsDiv.appendChild(mybuttonsDiv);
 
     mybuttonsDiv.style.margin = "10px";
+    mybuttonsDiv.style.padding = "10px";
 
     //texto info
     const textinfo = document.createElement("div");
     infoText(textinfo);
 
-    //mybuttonsDiv.style.padding = "3px";
-    //
-    mybuttonsDiv.appendChild(document.createElement("br"));
+    //title of the extension:
+    title = document.createElement("h3");
+    title.innerText = "Flying Tarta Tools:";
+    title.className = "manageItemsTitle";
+    mybuttonsDiv.appendChild(title);
+
     mybuttonsDiv.appendChild(fileinput);
     mybuttonsDiv.appendChild(document.createElement("br"));
     mybuttonsDiv.appendChild(textinfo)
     mybuttonsDiv.appendChild(document.createElement("br"));
     //mybuttonsDiv.appendChild(higlight);
     mybuttonsDiv.appendChild(addallmods);
-    mybuttonsDiv.appendChild(removeallitems);
+    //mybuttonsDiv.appendChild(removeallitems);
 
     buttonsDiv.appendChild(parent_mybuttonsDiv);
 
@@ -315,6 +336,6 @@ chrome.runtime.onMessage.addListener(
 */
 
 
-owo()
+addButtons()
 higlightMods()
 modAdder()
