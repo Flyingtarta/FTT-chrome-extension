@@ -1,14 +1,10 @@
 {
     "name": "FlyingTarta tools",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "description": "Add dependency to a mod in steam workshop easily with an .html preset generated with arma 3 launcher",
     "manifest_version": 3,
     "author": "FlyingTarta",
     "permissions": [
-        "storage",
-        "declarativeContent",
-        "activeTab",
-        "scripting",
         "tab"
     ],
     "host_permissions": [
@@ -16,7 +12,7 @@
     ],
     "action": {
         "default_popup": "index.html",
-        "default_title": "MUO Auto Search"
+        "default_title": "Flying Tarta Tools"
     },
     "background": {
         "service_worker": "background.js"
@@ -26,7 +22,8 @@
           "matches": ["<all_urls>"],
           "js": ["contentScript.js"]
         }
-      ]
+      ],
+    "icons":{}
 
 }
 

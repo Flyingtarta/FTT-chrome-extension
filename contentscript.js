@@ -307,52 +307,6 @@ function addButtons() {
     addallmods.addEventListener('click', toogleAddAllMods);
     //export2html.addEventListener("click", exporttohtml);
 }
-/*
-chrome.runtime.onMessage.addListener(
-    function (request, sender, sendResponse) {
- 
-        console.log(request.order)
- 
-        if ( request.order === "toggleHiglightMods" ) {
-            toggleShowModsInHtml();
-            let higlihtOn = JSON.parse(sessionStorage.getItem("toggleHiglightMods")) || false;
-            sendResponse({isHiglightOn: higlihtOn });
- 
-        }
-        
-        if ( request.order === "toggleAddAll") {
-                toggleAddAll();
-        }
-        
-        if (request.order === "modids") {
-            modids = JSON.stringify(request.ids)
-            sessionStorage.setItem("modsInPreset", JSON.stringify(request.ids));
-        }
- 
-        if (request.order === "addAll" ) {
-            let modids = JSON.stringify(request.ids)
-            if (modids === []) {
-                return;
-            }            
-            sessionStorage.setItem("modsInPreset_temp", JSON.stringify(request.ids));
-            sessionStorage.setItem("addAllmodsInpreset", JSON.stringify(true));
-            location.reload();
-        }
- 
-        //Requests of information 
-        if (request.order === "hasModIds") {
-            let modInPreset = JSON.parse(sessionStorage.getItem("modsInPreset")) || [];
-            sendResponse({mods_ids : modInPreset});
-        }
- 
-        if (request.order === "isHiglightOn") {
-            let higlihtOn = JSON.parse(sessionStorage.getItem("toggleHiglightMods")) || false;
-            sendResponse({isHiglightOn: higlihtOn });
-        }
- 
-    }
-);
-*/
 
 
 addButtons()
