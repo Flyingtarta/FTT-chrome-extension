@@ -228,7 +228,6 @@ function addButtons() {
             textinfo.appendChild(modUnsuscribedAlert);
 
         }
-
     }
 
     let buttonsDiv = document.getElementsByClassName("collectionAddItemsSection");
