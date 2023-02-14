@@ -147,7 +147,8 @@ function addButtons() {
         const items = document.getElementsByClassName("itemChoice");
 
         const breadcrumbs = document.getElementsByClassName("breadcrumbs")[0];
-        const ModUrl = breadcrumbs.getElementsByTagName("a")[2].href.split("=")[1];
+        const modDiv = breadcrumbs.getElementsByTagName("a")[2]; 
+        const ModUrl = modDiv.href.split("=")[1];
         const currentModInPreset =  modids.includes(ModUrl);
         
 
@@ -186,21 +187,22 @@ function addButtons() {
         })
         
         title.innerText = "Preset with: " + modids.length + " Mods in it detected";
-
+        if (currentModInPreset) {
+            title.innerText = title.innerText + " | " + modDiv.innerText + " is in the selected preset"; 
+        }
+        title.style.padding = "10px 0px 5px 0px";
         const subtitle = document.createElement("h5");
         textinfo.appendChild(subtitle);
         subtitle.className = "manageItemsTitle";
         subtitle.innerText = "Mods added to colection: " + modsLoaded + "/" + modids.length ;
-        if (currentModInPreset) {
-            subtitle.innerText = subtitle.innerText + " (This mod is in the preset)";
-        }
+
 
         if (modsExtra > 0) {
             console.log("mods extra detected"); 
             const miniAlert = document.createElement("h5");
             //miniAlert.className = "manageItemsTitle";
             miniAlert.style.color = "rgb(254, 162, 4)";
-            miniAlert.innerText = "INFO | There is " + modsExtra + " Mods loaded that dont are present in the preset ( need to be removed manually)";
+            miniAlert.innerText = "INFO | There is " + modsExtra + " Some dependencies are not in the selected preset ( need to be removed manually)";
             miniAlert.style.fontSize = "14px";
             textinfo.appendChild(miniAlert);
         }
@@ -208,7 +210,7 @@ function addButtons() {
         if (unsuscribed.length > 0) {
             console.log("hola2")
             const modUnsuscribedAlert = document.createElement("h5");
-            modUnsuscribedAlert.innerText = "ALERT! | There is mods in the html that you are not suscribed: ";
+            modUnsuscribedAlert.innerText = "ALERT! | There are mods in the selected preset that you are not subscribed to: ";
             modUnsuscribedAlert.classname = "manageItemsTitle";
             modUnsuscribedAlert.style.color = "rgb(254, 162, 4)";
             modUnsuscribedAlert.style.fontSize = "14px";
@@ -226,11 +228,7 @@ function addButtons() {
             textinfo.appendChild(modUnsuscribedAlert);
 
         }
-        
 
-        
-
-        
     }
 
     let buttonsDiv = document.getElementsByClassName("collectionAddItemsSection");
