@@ -1,0 +1,24 @@
+/*local preset*/
+
+.ftt-button {
+    color:#71A63C;
+    padding: 10px 0 0 10px;
+    border: 1px solid #71A63C;
+    border-radius: 5px;
+    background-color: #545759;
+}
+
+.ftt-button:hover {
+    background-color:black;
+}
+
+.ftt-header {
+    color:whitesmoke;
+    width: 100%;
+    height: 5%;
+    background-color: #545759;
+    vertical-align: middle;
+
+
+
+
