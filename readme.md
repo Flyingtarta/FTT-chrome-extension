@@ -14,3 +14,14 @@ FTT is an open-source Chrome extension aimed at streamlining processes in Steam 
 - Steam collection to preset HTML
 - Preset HTML to Steam collection
 - Dependencies - Preset HTML
+
+### arma 3 preset enhanced
+    - When preset is opened, allow you to use it as input to list the mods in the colection/dependecies tab
+    - More information about the preset, like number of mods, estimate of weight*
+    - allow you to remove and add mods in the preset adding buttons
+    - Sort names in alpahetic order
+    - see additional info of each mod ( weight, missing dependecies, etc )
+
+
+*not sure if posible
+

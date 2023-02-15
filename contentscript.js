@@ -1,14 +1,28 @@
 
 
+function extractIdsFromLinks(links) {
+    let mod_ids = [];
+    for (let i = 0; i < links.length; i++) {
+        mylink = links[i].href
+        let id = mylink.split("=")[mylink.split("=").length - 1];
+        mod_ids.push(id);
+    }
+    return mod_ids;
+}
+
 function readModsFromPreset(fileContent) {
     const iframe = document.createElement("iframe");
     iframe.style.display = "None";
+    iframe.style.height = "0px";
+    iframe.style.width = "0px";
     document.body.appendChild(iframe);
     iframe.contentWindow.document.body.innerHTML = fileContent;
     const links = iframe.contentWindow.document.getElementsByTagName("a");
-    iframe.style.height = "0px";
-    iframe.style.width = "0px";
+    const parent = iframe.parentNode;
+    parent.removeChild(iframe);
 
+    return ( extractIdsFromLinks(links) )
+    /*
     let mod_ids = [];
     for (let i = 0; i < links.length; i++) {
         mylink = links[i].href
@@ -18,6 +32,7 @@ function readModsFromPreset(fileContent) {
     const parent = iframe.parentNode;
     parent.removeChild(iframe);
     return mod_ids;
+    */
 }
 
 function toggleShowModsInHtml() {
@@ -112,10 +127,7 @@ function modAdder() {
 }
 
 function addButtons() {
-    /*
-        TESTING 
-    
-    */
+
     function createButton(text) {
         let div = document.createElement("div");
         div.className = "btnv6_blue_blue_innerfade btn_small_thin";
@@ -305,7 +317,53 @@ function addButtons() {
     //export2html.addEventListener("click", exporttohtml);
 }
 
+function extractFromLocalFile () {
+    const meta = document.getElementsByTagName("meta")[0].content
 
+    if (! meta === "preset") {
+        console.log("no es un preset de arma 3");
+        return; 
+    }
+
+    const modlist = document.getElementsByClassName("mod-list")[0];
+    const links = document.getElementsByTagName("a");
+    const mod_ids = extractIdsFromLinks(links);
+
+    //add information on the top    
+    const mydiv = document.createElement("div");
+    mydiv.style.width = "100%";
+    mydiv.style.height = "5%";
+    mydiv.style.padding = "10px";
+    mydiv.style.backgroundColor = "#545759";
+    mydiv.style.position = "fixed";
+    mydiv.style.display= "flex";
+    //mydiv.style.justifyContent = "center";
+    mydiv.style.verticalAlign = "middle";
+    //mydiv.style.flexDirection : ""
+
+
+    const title= document.createElement("h2");
+    mydiv.appendChild(title);
+    title.innerText = "Flying tarta tools";
+    
+    const ButtonUsePreset = document.createElement("button");
+    ButtonUsePreset.style.color = "#71A63C";
+    ButtonUsePreset.style.padding = "5px";
+    ButtonUsePreset.style.border = "3px solid #71A63C";
+    ButtonUsePreset.style.borderRadius = "10px";
+    ButtonUsePreset.style.backgroundColor = "#545759";
+    ButtonUsePreset.innerText = "Use this preset as input"; 
+    
+    mydiv.appendChild(ButtonUsePreset)
+
+    document.body.insertBefore(mydiv, document.body.firstChild);
+    
+
+
+}
+
+
+extractFromLocalFile()
 addButtons()
 higlightMods()
 modAdder()
